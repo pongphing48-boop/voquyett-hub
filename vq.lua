@@ -1,5 +1,5 @@
 -- ============================================================
--- VOQUYETT HUB V12 - SIÊU TỐC ĐỘ & VÔ HẠN NĂNG LƯỢNG
+-- VOQUYETT HUB V13 - TỐC ĐỘ AN TOÀN (CHỐNG LỖI 267)
 -- ============================================================
 
 local UserInputService = game:GetService("UserInputService")
@@ -12,10 +12,10 @@ local VirtualUser = game:GetService("VirtualUser")
 local AutoTap = false
 local AutoSpin = false
 local InfEnergy = false
-local CustomSpeed = 60 -- Tốc độ mặc định khi bật (Mức 60 là rất nhanh)
+local CustomSpeed = 32 -- Mức an toàn (chạy nhanh gấp đôi bình thường)
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "VoQuyettHubV12"
+ScreenGui.Name = "VoQuyettHubV13"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = game.CoreGui
 
@@ -50,7 +50,7 @@ local Title = Instance.new("TextLabel")
 Title.Parent = Menu
 Title.Size = UDim2.new(1, 0, 0, 35)
 Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Title.Text = "VOQUYETT HUB V12"
+Title.Text = "VOQUYETT HUB V13"
 Title.TextColor3 = Color3.fromRGB(0, 255, 255)
 Title.Font = Enum.Font.SourceSansBold
 Title.TextSize = 14
@@ -89,7 +89,6 @@ EnergyBtn.Font = Enum.Font.SourceSansBold
 EnergyBtn.TextSize = 13
 Instance.new("UICorner", EnergyBtn).CornerRadius = UDim.new(0, 6)
 
--- Thanh chỉnh tốc độ
 local SpeedLabel = Instance.new("TextLabel")
 SpeedLabel.Parent = Menu
 SpeedLabel.Size = UDim2.new(0.85, 0, 0, 20)
@@ -180,10 +179,10 @@ EnergyBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Tùy chỉnh tốc độ
+-- Tùy chỉnh tốc độ (Giới hạn an toàn 35)
 PlusBtn.MouseButton1Click:Connect(function()
-    CustomSpeed = CustomSpeed + 10
-    if CustomSpeed > 150 then CustomSpeed = 150 end -- Giới hạn tối đa 150
+    CustomSpeed = CustomSpeed + 1
+    if CustomSpeed > 35 then CustomSpeed = 35 end -- Đã hạ trần an toàn xuống 35
     SpeedLabel.Text = "Toc Do: " .. CustomSpeed
     if InfEnergy then
         local char = LocalPlayer.Character
@@ -192,8 +191,8 @@ PlusBtn.MouseButton1Click:Connect(function()
 end)
 
 MinusBtn.MouseButton1Click:Connect(function()
-    CustomSpeed = CustomSpeed - 10
-    if CustomSpeed < 16 then CustomSpeed = 16 end -- Giới hạn tối thiểu 16
+    CustomSpeed = CustomSpeed - 1
+    if CustomSpeed < 16 then CustomSpeed = 16 end
     SpeedLabel.Text = "Toc Do: " .. CustomSpeed
     if InfEnergy then
         local char = LocalPlayer.Character
@@ -215,7 +214,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
 
     if InfEnergy and char then
         local humanoid = char:FindFirstChild("Humanoid")
-        -- Khóa tốc độ ở mức He đã chọn (Mặc định là 60)
         if humanoid and humanoid.WalkSpeed ~= CustomSpeed then
             humanoid.WalkSpeed = CustomSpeed 
         end
