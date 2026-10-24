@@ -1,5 +1,5 @@
 -- ============================================================
--- VOQUYETT HUB V11 - INFINITE SPRINT (CHẠY NHANH KHÔNG TỤT NL)
+-- VOQUYETT HUB V12 - SIÊU TỐC ĐỘ & VÔ HẠN NĂNG LƯỢNG
 -- ============================================================
 
 local UserInputService = game:GetService("UserInputService")
@@ -12,9 +12,10 @@ local VirtualUser = game:GetService("VirtualUser")
 local AutoTap = false
 local AutoSpin = false
 local InfEnergy = false
+local CustomSpeed = 60 -- Tốc độ mặc định khi bật (Mức 60 là rất nhanh)
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "VoQuyettHubV11"
+ScreenGui.Name = "VoQuyettHubV12"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = game.CoreGui
 
@@ -36,8 +37,8 @@ IconStroke.Thickness = 2
 
 local Menu = Instance.new("Frame")
 Menu.Parent = ScreenGui
-Menu.Size = UDim2.new(0, 200, 0, 210)
-Menu.Position = UDim2.new(0.5, -100, 0.5, -105)
+Menu.Size = UDim2.new(0, 200, 0, 260)
+Menu.Position = UDim2.new(0.5, -100, 0.5, -130)
 Menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Menu.BorderSizePixel = 0
 Menu.Visible = false
@@ -49,7 +50,7 @@ local Title = Instance.new("TextLabel")
 Title.Parent = Menu
 Title.Size = UDim2.new(1, 0, 0, 35)
 Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Title.Text = "VOQUYETT HUB V11"
+Title.Text = "VOQUYETT HUB V12"
 Title.TextColor3 = Color3.fromRGB(0, 255, 255)
 Title.Font = Enum.Font.SourceSansBold
 Title.TextSize = 14
@@ -57,36 +58,69 @@ Instance.new("UICorner", Title).CornerRadius = UDim.new(0, 8)
 
 local TapBtn = Instance.new("TextButton")
 TapBtn.Parent = Menu
-TapBtn.Size = UDim2.new(0.85, 0, 0, 35)
-TapBtn.Position = UDim2.new(0.075, 0, 0.18, 0)
+TapBtn.Size = UDim2.new(0.85, 0, 0, 30)
+TapBtn.Position = UDim2.new(0.075, 0, 0.15, 0)
 TapBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 TapBtn.Text = "Auto Tap: OFF"
 TapBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 TapBtn.Font = Enum.Font.SourceSansBold
-TapBtn.TextSize = 14
+TapBtn.TextSize = 13
 Instance.new("UICorner", TapBtn).CornerRadius = UDim.new(0, 6)
 
 local SpinBtn = Instance.new("TextButton")
 SpinBtn.Parent = Menu
-SpinBtn.Size = UDim2.new(0.85, 0, 0, 35)
-SpinBtn.Position = UDim2.new(0.075, 0, 0.38, 0)
+SpinBtn.Size = UDim2.new(0.85, 0, 0, 30)
+SpinBtn.Position = UDim2.new(0.075, 0, 0.32, 0)
 SpinBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 SpinBtn.Text = "Auto Spin Max: OFF"
 SpinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 SpinBtn.Font = Enum.Font.SourceSansBold
-SpinBtn.TextSize = 14
+SpinBtn.TextSize = 13
 Instance.new("UICorner", SpinBtn).CornerRadius = UDim.new(0, 6)
 
 local EnergyBtn = Instance.new("TextButton")
 EnergyBtn.Parent = Menu
-EnergyBtn.Size = UDim2.new(0.85, 0, 0, 35)
-EnergyBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
+EnergyBtn.Size = UDim2.new(0.85, 0, 0, 30)
+EnergyBtn.Position = UDim2.new(0.075, 0, 0.49, 0)
 EnergyBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 EnergyBtn.Text = "Vo Han Nang Luong: OFF"
 EnergyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 EnergyBtn.Font = Enum.Font.SourceSansBold
-EnergyBtn.TextSize = 14
+EnergyBtn.TextSize = 13
 Instance.new("UICorner", EnergyBtn).CornerRadius = UDim.new(0, 6)
+
+-- Thanh chỉnh tốc độ
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Parent = Menu
+SpeedLabel.Size = UDim2.new(0.85, 0, 0, 20)
+SpeedLabel.Position = UDim2.new(0.075, 0, 0.70, 0)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "Toc Do: " .. CustomSpeed
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+SpeedLabel.Font = Enum.Font.SourceSansBold
+SpeedLabel.TextSize = 14
+
+local MinusBtn = Instance.new("TextButton")
+MinusBtn.Parent = Menu
+MinusBtn.Size = UDim2.new(0.4, 0, 0, 25)
+MinusBtn.Position = UDim2.new(0.075, 0, 0.85, 0)
+MinusBtn.BackgroundColor3 = Color3.fromRGB(100, 50, 50)
+MinusBtn.Text = "- Giam Toc"
+MinusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinusBtn.Font = Enum.Font.SourceSansBold
+MinusBtn.TextSize = 12
+Instance.new("UICorner", MinusBtn).CornerRadius = UDim.new(0, 6)
+
+local PlusBtn = Instance.new("TextButton")
+PlusBtn.Parent = Menu
+PlusBtn.Size = UDim2.new(0.4, 0, 0, 25)
+PlusBtn.Position = UDim2.new(0.525, 0, 0.85, 0)
+PlusBtn.BackgroundColor3 = Color3.fromRGB(50, 100, 50)
+PlusBtn.Text = "+ Tang Toc"
+PlusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+PlusBtn.Font = Enum.Font.SourceSansBold
+PlusBtn.TextSize = 12
+Instance.new("UICorner", PlusBtn).CornerRadius = UDim.new(0, 6)
 
 local MenuOpen = false
 Icon.MouseButton1Click:Connect(function()
@@ -138,12 +172,32 @@ EnergyBtn.MouseButton1Click:Connect(function()
     EnergyBtn.Text = "Vo Han Nang Luong: " .. (InfEnergy and "ON" or "OFF")
     EnergyBtn.BackgroundColor3 = InfEnergy and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(45, 45, 45)
     
-    -- Nếu tắt thì trả tốc độ về bình thường
     if not InfEnergy then
         local char = LocalPlayer.Character
         if char and char:FindFirstChild("Humanoid") then
             char.Humanoid.WalkSpeed = 16
         end
+    end
+end)
+
+-- Tùy chỉnh tốc độ
+PlusBtn.MouseButton1Click:Connect(function()
+    CustomSpeed = CustomSpeed + 10
+    if CustomSpeed > 150 then CustomSpeed = 150 end -- Giới hạn tối đa 150
+    SpeedLabel.Text = "Toc Do: " .. CustomSpeed
+    if InfEnergy then
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then char.Humanoid.WalkSpeed = CustomSpeed end
+    end
+end)
+
+MinusBtn.MouseButton1Click:Connect(function()
+    CustomSpeed = CustomSpeed - 10
+    if CustomSpeed < 16 then CustomSpeed = 16 end -- Giới hạn tối thiểu 16
+    SpeedLabel.Text = "Toc Do: " .. CustomSpeed
+    if InfEnergy then
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then char.Humanoid.WalkSpeed = CustomSpeed end
     end
 end)
 
@@ -160,13 +214,13 @@ RunService.RenderStepped:Connect(function(deltaTime)
     end
 
     if InfEnergy and char then
-        -- 1. Tự động đẩy tốc độ chạy lên cao (Sprint liên tục)
         local humanoid = char:FindFirstChild("Humanoid")
-        if humanoid and humanoid.WalkSpeed < 30 then
-            humanoid.WalkSpeed = 30 -- Tốc độ chạy nhanh của game (có thể chỉnh lên 40-50 tùy game)
+        -- Khóa tốc độ ở mức He đã chọn (Mặc định là 60)
+        if humanoid and humanoid.WalkSpeed ~= CustomSpeed then
+            humanoid.WalkSpeed = CustomSpeed 
         end
 
-        -- 2. Bơm năng lượng liên tục (Game vừa trừ là tự động đầy lại)
+        -- Bơm năng lượng
         for _, obj in pairs(char:GetDescendants()) do
             if (obj:IsA("NumberValue") or obj:IsA("IntValue")) and (string.find(string.lower(obj.Name), "stamina") or string.find(string.lower(obj.Name), "energy")) then
                 obj.Value = 999999
@@ -175,16 +229,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         for _, obj in pairs(LocalPlayer:GetDescendants()) do
             if (obj:IsA("NumberValue") or obj:IsA("IntValue")) and (string.find(string.lower(obj.Name), "stamina") or string.find(string.lower(obj.Name), "energy")) then
                 obj.Value = 999999
-            end
-        end
-        
-        -- 3. Quét cả Attribute ẩn
-        for _, obj in pairs(char:GetChildren()) do
-            for _, attr in pairs(obj:GetAttributes()) do
-                local attrName = string.lower(attr)
-                if string.find(attrName, "stamina") or string.find(attrName, "energy") then
-                    obj:SetAttribute(attr, 999999)
-                end
             end
         end
     end
