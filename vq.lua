@@ -1,5 +1,5 @@
 -- ============================================================
--- VOQUYETT HUB V10 - ULTRA STAMINA HACK & MAX SPIN
+-- VOQUYETT HUB V11 - INFINITE SPRINT (CHẠY NHANH KHÔNG TỤT NL)
 -- ============================================================
 
 local UserInputService = game:GetService("UserInputService")
@@ -11,10 +11,10 @@ local VirtualUser = game:GetService("VirtualUser")
 
 local AutoTap = false
 local AutoSpin = false
-local InfStamina = false
+local InfEnergy = false
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "VoQuyettHubV10"
+ScreenGui.Name = "VoQuyettHubV11"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = game.CoreGui
 
@@ -49,7 +49,7 @@ local Title = Instance.new("TextLabel")
 Title.Parent = Menu
 Title.Size = UDim2.new(1, 0, 0, 35)
 Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Title.Text = "VOQUYETT HUB V10"
+Title.Text = "VOQUYETT HUB V11"
 Title.TextColor3 = Color3.fromRGB(0, 255, 255)
 Title.Font = Enum.Font.SourceSansBold
 Title.TextSize = 14
@@ -77,16 +77,16 @@ SpinBtn.Font = Enum.Font.SourceSansBold
 SpinBtn.TextSize = 14
 Instance.new("UICorner", SpinBtn).CornerRadius = UDim.new(0, 6)
 
-local StamBtn = Instance.new("TextButton")
-StamBtn.Parent = Menu
-StamBtn.Size = UDim2.new(0.85, 0, 0, 35)
-StamBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
-StamBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-StamBtn.Text = "Infinite Energy: OFF"
-StamBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-StamBtn.Font = Enum.Font.SourceSansBold
-StamBtn.TextSize = 14
-Instance.new("UICorner", StamBtn).CornerRadius = UDim.new(0, 6)
+local EnergyBtn = Instance.new("TextButton")
+EnergyBtn.Parent = Menu
+EnergyBtn.Size = UDim2.new(0.85, 0, 0, 35)
+EnergyBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
+EnergyBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+EnergyBtn.Text = "Vo Han Nang Luong: OFF"
+EnergyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+EnergyBtn.Font = Enum.Font.SourceSansBold
+EnergyBtn.TextSize = 14
+Instance.new("UICorner", EnergyBtn).CornerRadius = UDim.new(0, 6)
 
 local MenuOpen = false
 Icon.MouseButton1Click:Connect(function()
@@ -94,6 +94,7 @@ Icon.MouseButton1Click:Connect(function()
     Menu.Visible = MenuOpen
 end)
 
+-- Kéo thả Menu
 local dragging, dragInput, dragStart, startPos
 Menu.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -119,6 +120,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+-- Bật tắt
 TapBtn.MouseButton1Click:Connect(function()
     AutoTap = not AutoTap
     TapBtn.Text = "Auto Tap: " .. (AutoTap and "ON" or "OFF")
@@ -131,10 +133,18 @@ SpinBtn.MouseButton1Click:Connect(function()
     SpinBtn.BackgroundColor3 = AutoSpin and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(45, 45, 45)
 end)
 
-StamBtn.MouseButton1Click:Connect(function()
-    InfStamina = not InfStamina
-    StamBtn.Text = "Infinite Energy: " .. (InfStamina and "ON" or "OFF")
-    StamBtn.BackgroundColor3 = InfStamina and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(45, 45, 45)
+EnergyBtn.MouseButton1Click:Connect(function()
+    InfEnergy = not InfEnergy
+    EnergyBtn.Text = "Vo Han Nang Luong: " .. (InfEnergy and "ON" or "OFF")
+    EnergyBtn.BackgroundColor3 = InfEnergy and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(45, 45, 45)
+    
+    -- Nếu tắt thì trả tốc độ về bình thường
+    if not InfEnergy then
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then
+            char.Humanoid.WalkSpeed = 16
+        end
+    end
 end)
 
 RunService.RenderStepped:Connect(function(deltaTime)
@@ -145,38 +155,30 @@ RunService.RenderStepped:Connect(function(deltaTime)
         VirtualUser:ClickButton1(Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2))
     end
 
-    if AutoSpin then
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(360) * deltaTime, 0)
-        end
+    if AutoSpin and char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(360) * deltaTime, 0)
     end
 
-    if InfStamina and char then
-        -- 1. Khóa tốc độ chạy (Đảm bảo game không trừ năng lượng vì tội chạy nhanh)
+    if InfEnergy and char then
+        -- 1. Tự động đẩy tốc độ chạy lên cao (Sprint liên tục)
         local humanoid = char:FindFirstChild("Humanoid")
-        if humanoid and humanoid.WalkSpeed > 16 then
-            humanoid.WalkSpeed = 16
+        if humanoid and humanoid.WalkSpeed < 30 then
+            humanoid.WalkSpeed = 30 -- Tốc độ chạy nhanh của game (có thể chỉnh lên 40-50 tùy game)
         end
 
-        -- 2. Quét toàn bộ Value (Số) trong nhân vật và Player
+        -- 2. Bơm năng lượng liên tục (Game vừa trừ là tự động đầy lại)
         for _, obj in pairs(char:GetDescendants()) do
-            if obj:IsA("NumberValue") or obj:IsA("IntValue") then
-                local name = string.lower(obj.Name)
-                if string.find(name, "stamina") or string.find(name, "energy") or string.find(name, "power") then
-                    obj.Value = 999999
-                end
+            if (obj:IsA("NumberValue") or obj:IsA("IntValue")) and (string.find(string.lower(obj.Name), "stamina") or string.find(string.lower(obj.Name), "energy")) then
+                obj.Value = 999999
             end
         end
         for _, obj in pairs(LocalPlayer:GetDescendants()) do
-            if obj:IsA("NumberValue") or obj:IsA("IntValue") then
-                local name = string.lower(obj.Name)
-                if string.find(name, "stamina") or string.find(name, "energy") or string.find(name, "power") then
-                    obj.Value = 999999
-                end
+            if (obj:IsA("NumberValue") or obj:IsA("IntValue")) and (string.find(string.lower(obj.Name), "stamina") or string.find(string.lower(obj.Name), "energy")) then
+                obj.Value = 999999
             end
         end
-
-        -- 3. Quét Attribute (Thuộc tính ẩn của game)
+        
+        -- 3. Quét cả Attribute ẩn
         for _, obj in pairs(char:GetChildren()) do
             for _, attr in pairs(obj:GetAttributes()) do
                 local attrName = string.lower(attr)
